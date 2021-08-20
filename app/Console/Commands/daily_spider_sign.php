@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Goutte\Client;
 use DB;
+use Log;
 class daily_spider_sign extends Command
 {
     /**
@@ -39,12 +40,15 @@ class daily_spider_sign extends Command
     public function handle()
     {
         //
+        Log::debug(__CLASS__.' command start.');
         $client = new Client();
         $date = date('Y-m-d');
         $four_part = ['all','love','job','lucky'];
 
         try {
+           
             DB::begintransaction();
+            \App\Models\sign_log::where('date', '=', $date)->delete();
             for ($x = 0; $x <= 11; $x++) {
                 $crawler = $client->request('GET', 'https://astro.click108.com.tw/daily_'.$x.'.php?iAcDay='.$date.'&iAstro='.$x);
                 $sign = substr((string)$crawler->filter('.TODAY_CONTENT h3')->text(),2*3,3*3);
@@ -64,11 +68,13 @@ class daily_spider_sign extends Command
                 $nrw->save();
             }
             DB::commit();
+            Log::debug(__CLASS__.' command finish.');
 
         }
         catch (\Exception $e) {
             DB::rollback();
-            dd($e);
+            Log::error(__CLASS__.' Line : '.$e->getLine().' '.$e->getMessage());
+           
         }
        
     }
