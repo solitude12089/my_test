@@ -20,7 +20,7 @@
                     @endif
 
                     <table id="example" class="display" width="100%"></table>
-                    You are logged in!
+                    
                 </div>
             </div>
         </div>
@@ -33,11 +33,10 @@
 
 
 
-<script type="text/javascript" src="http://127.0.0.1:8080/js/datatables.min.js"></script>
-<script type="text/javascript" src="http://127.0.0.1:8080/js/chosen/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
 <script>
     var dataSet = <?php echo $sign_logs; ?>;
-    $(document).ready(function() {
     $('#example').DataTable( {
         data: dataSet,
         order : [[ 0, "desc" ]],
@@ -54,7 +53,6 @@
             { title: "說明" , data: "lucky_note" },
            
         ]
-    } );
-} );
-    </script>
+    });
+</script>
 @endsection
