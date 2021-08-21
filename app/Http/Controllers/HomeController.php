@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Carbon\Carbon;
 class HomeController extends Controller
 {
     /**
@@ -23,8 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $sign_logs = DB::table('sign_logs')->paginate(15);
-
+        $currentDateTime = Carbon::now()->subDays(7)->format('Y-m-d');
+        $sign_logs =  \App\Models\sign_log::where('date','>',$currentDateTime)->get();
         return view('home',['sign_logs'=>$sign_logs]);
     }
 
